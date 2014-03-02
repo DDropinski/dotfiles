@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/DDropinski/.dotfiles'
+let g:netrw_dirhist_2='/Users/DDropinski/.dotfiles/zsh'
+let g:netrw_dirhist_3='/Users/DDropinski/Documents/Fall2013/Automata/p1/.git'
+let g:netrw_dirhist_4='/Users/DDropinski/.dotfiles'

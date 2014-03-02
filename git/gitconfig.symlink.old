@@ -1,0 +1,22 @@
+[user]
+	name = David Dropinski
+	email = DropinskiD@gmail.com
+
+[color]
+        branch = auto
+        diff = auto
+        interactive = auto
+        status = auto
+[core]
+        editor = vim
+	excludesfile = /Users/DDropinski/.gitignore_global
+[merge]
+        tool = vimdiff
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = " "
+	trustExitCode = true
+[credential]
+	helper = osxkeychain
