@@ -1,8 +1,10 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_cnt =8
 let g:netrw_dirhist_1='/Users/DDropinski/.dotfiles'
 let g:netrw_dirhist_2='/Users/DDropinski/.dotfiles/zsh'
 let g:netrw_dirhist_3='/Users/DDropinski/Documents/Fall2013/Automata/p1/.git'
 let g:netrw_dirhist_4='/Users/DDropinski/.dotfiles'
 let g:netrw_dirhist_5='/Users/david.dropinski/.dotfiles/vim/vim.symlink/vim.symlink'
 let g:netrw_dirhist_6='/Users/david.dropinski/.dotfiles/vim/vim.symlink/autoload'
+let g:netrw_dirhist_7='/Users/david.dropinski/.dotfiles/vim/vim.symlink/bundle'
+let g:netrw_dirhist_8='/Users/david.dropinski/src/courtside'

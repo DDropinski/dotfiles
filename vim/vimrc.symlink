@@ -1,15 +1,58 @@
-syntax on
-set autoindent
+
+" Remove all existing autocmds
+autocmd!
+
+"""""""""""""""""""""""""""""""
+" GENERAL EDITING CONFIGURATION
+"""""""""""""""""""""""""""""""
+set nocompatible
+" Allow unsaved background buffers and remember marks/undos for them
+set hidden
+" remember more commands and search history
+set history=10000
 set expandtab
+set tabstop=2
 set shiftwidth=2
 set softtabstop=2
-set tabstop=2
+set autoindent
+set laststatus=2
+set showmatch
+set incsearch
 set hlsearch
+" make searches case-sensitive only if they contain upper-case characters
+set ignorecase smartcase
+" highlight current line
+set cmdheight=1
+" ALways show tab bar at the top
+set showtabline=2
+set cursorline
+
+" Keep more context when scrolling off the end of the buffer
 set scrolloff=10
+set nobackup
+set nowritebackup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+" " display incomplete commands
+set showcmd
+" " Enable highlighting for syntax
+syntax on
+
 set ruler
-set t_Co=256
-let g:molokai_original = 1
-colorscheme molokai
+set number
+set smarttab
+
+" Fix slow O inserts
+:set timeout timeoutlen=1000 ttimeoutlen=100
+
+" Insert only one space when joining lines that contain sentence-terminating
+" punctuation like `.`.
+set nojoinspaces
+" If a file is changed outside of vim, automatically reload it without asking
+set autoread
+
 filetype on
 filetype plugin on
 filetype plugin indent on
@@ -18,27 +61,57 @@ nmap <silent> <C-j> :wincmd j<CR>
 nmap <silent> <C-h> :wincmd h<CR>
 nmap <silent> <C-l> :wincmd l<CR>
 
+let mapleader=","
+
 call pathogen#infect()
 
-" Restore cursor to last file position
-  " Tell vim to remember certain things when we exit
-  "  '10  :  marks will be remembered for up to 10 previously edited files
-  "  "100 :  will save up to 100 lines for each register
-  "  :20  :  up to 20 lines of command-line history will be remembered
-  "  %    :  saves and restores the buffer list
-  "  n... :  where to save the viminfo files
-set viminfo='10,\"100,:20,%,n~/.viminfo
+"""""""""""""""""""""""""""""""
+" CUSTOM AUTOCMDS
+"""""""""""""""""""""""""""""""
 
-function! ResCur()
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
+augroup vimrcEx
+  " Clear all autocmds in the group
+   autocmd!
+   autocmd FileType text setlocal textwidth=78
+   
+  " Jump to last curor position unless it's invaliud or in an event handler
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+  autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
+  autocmd BufRead *.markdown  set ai formatoptions=tcroqn2 comments=n:&gt;
+augroup END
+
+"""""""""""""""""""""""""""""""
+" COLOR
+"""""""""""""""""""""""""""""""
+let g:molokai_original = 1
+colorscheme molokai
+set t_Co=256
+
+"""""""""""""""""""""""""""""""
+" STATUS LINE
+"""""""""""""""""""""""""""""""
+" :set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" MULTIPURPOSE TAB KEY
+" Indent if we're at the beginning of a line. Else, do completion.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! InsertTabWrapper()
+  let col = col('.') - 1
+  if !col || getline('.')[col - 1] !~ '\k'
+    return "\<tab>"
+  else
+    return "\<c-p>"
   endif
 endfunction
+inoremap <expr> <tab> InsertTabWrapper()
+inoremap <s-tab> <c-n>
 
-augroup resCur
-  autocmd!
-  autocmd BufWinEnter * call ResCur()
-augroup END
-" End restore cursor
-
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SHORTCUT TO REFERENCE CURRENT FILE'S PATH IN COMMAND LINE MODE
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+cnoremap <expr> %% expand('%:h').'/'
