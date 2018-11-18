@@ -1,6 +1,5 @@
-
-" Remove all existing autocmds
-autocmd!
+" ddropinski .vimrc
+call pathogen#infect()
 
 """""""""""""""""""""""""""""""
 " GENERAL EDITING CONFIGURATION
@@ -44,6 +43,10 @@ set ruler
 set number
 set smarttab
 
+
+set wildmenu
+set wildmode=longest:full,full
+
 " Fix slow O inserts
 :set timeout timeoutlen=1000 ttimeoutlen=100
 
@@ -52,18 +55,31 @@ set smarttab
 set nojoinspaces
 " If a file is changed outside of vim, automatically reload it without asking
 set autoread
+" Automatically save before commands like :next and :make
+set autowrite
 
 filetype on
 filetype plugin on
 filetype plugin indent on
-nmap <silent> <C-k> :wincmd k<CR>
-nmap <silent> <C-j> :wincmd j<CR>
-nmap <silent> <C-h> :wincmd h<CR>
-nmap <silent> <C-l> :wincmd l<CR>
 
 let mapleader=","
 
-call pathogen#infect()
+" call pathogen#infect()
+
+" Display extra whitespace
+set list listchars=tab:»·,trail:·,nbsp:·
+
+" Open new splits to the right and bottom
+set splitbelow
+set splitright
+
+"""""""""""""""""""""""""""""""
+" Better Split Navigation
+"""""""""""""""""""""""""""""""
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 """""""""""""""""""""""""""""""
 " CUSTOM AUTOCMDS
@@ -73,6 +89,12 @@ augroup vimrcEx
   " Clear all autocmds in the group
    autocmd!
    autocmd FileType text setlocal textwidth=78
+   autocmd FileType text setlocal textwidth=78
+   autocmd FileType git,gitcommit setlocal foldmethod=syntax foldlevel=1
+   autocmd FileType gitcommit setlocal spell
+   autocmd FileType markdown setlocal textwidth=78 linebreak nolist
+   autocmd FileType javascript smartindent nocindent
+
    
   " Jump to last curor position unless it's invaliud or in an event handler
   autocmd BufReadPost *
@@ -82,6 +104,7 @@ augroup vimrcEx
 
   autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
   autocmd BufRead *.markdown  set ai formatoptions=tcroqn2 comments=n:&gt;
+  autocmd BufNewFile,BufRead *.txt,README,INSTALL,NEWS,TODO if &ft == ""|set ft=text|endif
 augroup END
 
 """""""""""""""""""""""""""""""
@@ -91,25 +114,22 @@ let g:molokai_original = 1
 colorscheme molokai
 set t_Co=256
 
-"""""""""""""""""""""""""""""""
-" STATUS LINE
-"""""""""""""""""""""""""""""""
-" :set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MULTIPURPOSE TAB KEY
 " Indent if we're at the beginning of a line. Else, do completion.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! InsertTabWrapper()
-  let col = col('.') - 1
-  if !col || getline('.')[col - 1] !~ '\k'
-    return "\<tab>"
-  else
-    return "\<c-p>"
-  endif
-endfunction
-inoremap <expr> <tab> InsertTabWrapper()
-inoremap <s-tab> <c-n>
+" 2018-11-18: Pretty sure I don't have a c-p plugin
+" function! InsertTabWrapper()
+"   let col = col('.') - 1
+"   if !col || getline('.')[col - 1] !~ '\k'
+"     return "\<tab>"
+"   else
+"     return "\<c-p>"
+"   endif
+" endfunction
+" inoremap <expr> <tab> InsertTabWrapper()
+" inoremap <s-tab> <c-n>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " SHORTCUT TO REFERENCE CURRENT FILE'S PATH IN COMMAND LINE MODE
