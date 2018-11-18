@@ -108,6 +108,13 @@ augroup vimrcEx
 augroup END
 
 """""""""""""""""""""""""""""""
+" Plugins
+"""""""""""""""""""""""""""""""
+augroup vimScratch
+  let g:scratch_persistence_file = '~/Dropbox/Scratch/scratchpad.txt'
+augroup END
+
+"""""""""""""""""""""""""""""""
 " COLOR
 """""""""""""""""""""""""""""""
 :set t_Co=256
