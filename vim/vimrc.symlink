@@ -110,10 +110,9 @@ augroup END
 """""""""""""""""""""""""""""""
 " COLOR
 """""""""""""""""""""""""""""""
-let g:molokai_original = 1
+:set t_Co=256
+:set background=dark
 colorscheme molokai
-set t_Co=256
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MULTIPURPOSE TAB KEY
