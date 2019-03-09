@@ -4,6 +4,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/david.dropinski/.oh-my-zsh
 
+
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -90,7 +91,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export PATH="/usr/local/sbin:$PATH:$HOME/Documents/chromedriver"
 # Expose homebrew ruby to system
-export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/2.5.0/bin:$PATH"
 
 # Open first Xcode workspace or project
 function xc {
@@ -106,3 +107,5 @@ function xc {
 }
 
 export BASE_URL=hudl.com
+
+eval "$(rbenv init -)"
