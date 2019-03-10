@@ -1,143 +1,214 @@
-" ddropinski .vimrc
-call pathogen#infect()
+"
+" David Dropinski's Vim Configuration
+"
+" remove all existing autocmds
+autocmd!
 
-"""""""""""""""""""""""""""""""
-" GENERAL EDITING CONFIGURATION
-"""""""""""""""""""""""""""""""
+
 set nocompatible
-" Allow unsaved background buffers and remember marks/undos for them
-set hidden
-" remember more commands and search history
-set history=10000
-set expandtab
+
+" Set filetype stuff to on
+filetype on
+filetype plugin on
+filetype indent on
+
+" Tabstops are 2 spaces
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
+set expandtab
 set autoindent
-set laststatus=2
-set showmatch
-set incsearch
-set hlsearch
+
+" By default, I don't like wrapping
+set nowrap
+set textwidth=0
+
+" Printing options
+set printoptions=header:0,duplex:long,paper:letter
+
+" set the search scan to wrap lines
+set wrapscan
+
 " make searches case-sensitive only if they contain upper-case characters
 set ignorecase smartcase
-" highlight current line
-set cmdheight=1
-" ALways show tab bar at the top
-set showtabline=2
-set cursorline
 
-" Keep more context when scrolling off the end of the buffer
-set scrolloff=10
-set nobackup
-set nowritebackup
-set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
-" " display incomplete commands
-set showcmd
-" " Enable highlighting for syntax
+
+" Make sure that unsaved buffers that are to be put in the background are 
+" allowed to go in there (ie. the "must save first" error doesn't come up)
+set hidden
+
+" tell VIM to always put a status line in, even if there is only one window
+set laststatus=2
+
+" Switch on syntax highlighting.
 syntax on
 
-set ruler
-set number
-set smarttab
+" Keep some stuff in the history
+set history=100
 
+" TODO: Do I even use folds???
+" These commands open folds
+" set foldopen=block,insert,jump,mark,percent,quickfix,search,tag,undo
 
+" When the page starts to scroll, keep the cursor 8 lines from the top and 8
+" lines from the bottom
+set scrolloff=3
+
+" Make the command-line completion better
 set wildmenu
-set wildmode=longest:full,full
 
-" Fix slow O inserts
-:set timeout timeoutlen=1000 ttimeoutlen=100
+" Longest common string, please 
+set wildmode=longest,list
 
-" Insert only one space when joining lines that contain sentence-terminating
-" punctuation like `.`.
-set nojoinspaces
-" If a file is changed outside of vim, automatically reload it without asking
+" Enable search highlighting
+set hlsearch
+
+" Incrementally match the search
+set incsearch
+
+" highlight current line
+set cursorline
+
+" share the macOS pasteboard instead of a Vim register
+if $TMUX == ''
+  set clipboard+=unnamed 
+endif
+
+" Automatically read a file that has changed on disk
 set autoread
-" Automatically save before commands like :next and :make
-set autowrite
 
-filetype on
-filetype plugin on
-filetype plugin indent on
+" Line numbering
+set number
 
-let mapleader=","
+" Briefly jump to the matching bracket/paren/etc.
+set showmatch
 
-" call pathogen#infect()
+" show visual indicator of >80c lines
+" hitting 80 lines is death
+" set colorcolumn=81
 
-" Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:·
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Leader Things
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Open new splits to the right and bottom
+" System default for mappings is now the "," character
+let mapleader = ","
+
+
+" cd to the directory containing the file in the buffer
+nmap <silent> ,cd :lcd %:h<CR>
+
+" Edit the vimrc file
+nmap <silent> ,ev :e ~/.vimrc<CR>
+nmap <silent> ,sv :so ~/.vimrc<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Splits with <c-hjkl>
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
+" Open splits to the right, bottom
 set splitbelow
 set splitright
 
-"""""""""""""""""""""""""""""""
-" Better Split Navigation
-"""""""""""""""""""""""""""""""
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 
-"""""""""""""""""""""""""""""""
-" CUSTOM AUTOCMDS
-"""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Maybe a little wild
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Stop typing jj during input mode like a dummy
+imap jj <esc>
+" Stop typing jj during command-line mode like a dummy
+cmap jj <esc>
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Autocmds 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 augroup vimrcEx
   " Clear all autocmds in the group
-   autocmd!
-   autocmd FileType text setlocal textwidth=78
-   autocmd FileType text setlocal textwidth=78
-   autocmd FileType git,gitcommit setlocal foldmethod=syntax foldlevel=1
-   autocmd FileType gitcommit setlocal spell
-   autocmd FileType markdown setlocal textwidth=78 linebreak nolist
-   autocmd FileType javascript smartindent nocindent
-
-   
-  " Jump to last curor position unless it's invaliud or in an event handler
+  autocmd!
+  autocmd FileType text setlocal textwidth=78
+  " Jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
 
+  "for ruby, autoindent with two spaces, always expand tabs
   autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
   autocmd BufRead *.markdown  set ai formatoptions=tcroqn2 comments=n:&gt;
-  autocmd BufNewFile,BufRead *.txt,README,INSTALL,NEWS,TODO if &ft == ""|set ft=text|endif
+
+  " Leave the return key alone when in command line windows, since it's used
+  " to run commands there.
+  autocmd! CmdwinEnter * :unmap <cr>
+  autocmd! CmdwinLeave * :call MapCR()
+
+  " *.md is markdown
+  autocmd! BufNewFile,BufRead *.md setlocal ft=
+
+  " javascript
+  autocmd! FileType javascript set sw=2 sts=2 expandtab autoindent smartindent nocindent
 augroup END
 
-"""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Status Line
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" function! DerekFugitiveStatusLine()
+"  let status = fugitive#statusline()
+"  let trimmed = substitute(status, '\[Git(\(.*\))\]', '\1', '')
+"  let trimmed = substitute(trimmed, '\(\w\)\w\+[_/]\ze', '\1/', '')
+"  let trimmed = substitute(trimmed, '/[^_]*\zs_.*', '', '')
+"  if len(trimmed) == 0
+"    return ""
+"  else
+"    return '(' . trimmed[0:10] . ')'
+"  endif
+"endfunction
+
+" Set the status line the way i like it
+":set statusline=%f\ %m\ %r%{DerekFugitiveStatusLine()}\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
+
+
+function! DerekFugitiveStatusLine()
+  let status = fugitive#statusline()
+  let trimmed = substitute(status, '\[Git(\(.*\))\]', '\1', '')
+  let trimmed = substitute(trimmed, '\(\w\)\w\+[_/]\ze', '\1/', '')
+  let trimmed = substitute(trimmed, '/[^_]*\zs_.*', '', '')
+  if len(trimmed) == 0
+    return ""
+  else
+    return '(' . trimmed[0:10] . ')'
+  endif
+endfunction
+
+" Set the status line the way i like it
+" set stl=%f\ %m\ %r%{DerekFugitiveStatusLine()}\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
+set statusline=%F%m%r%h%w\ %{fugitive#statusline()}\ [%l,%c]\ [%L,%p%%]
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Colorize
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:set t_Co=256 " 256 colors
+set background=dark
+" TODO: Back to the old colorscheme?
+color grb256
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins
-"""""""""""""""""""""""""""""""
-augroup vimScratch
-  let g:scratch_persistence_file = '~/Dropbox/Scratch/scratchpad.txt'
-augroup END
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""
-" COLOR
-"""""""""""""""""""""""""""""""
-:set t_Co=256
-:set background=dark
-colorscheme molokai
+" Ctrl-P -- https://github.com/ctrlpvim/ctrlp.vim
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_working_path_mode = 'ra'
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" MULTIPURPOSE TAB KEY
-" Indent if we're at the beginning of a line. Else, do completion.
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 2018-11-18: Pretty sure I don't have a c-p plugin
-" function! InsertTabWrapper()
-"   let col = col('.') - 1
-"   if !col || getline('.')[col - 1] !~ '\k'
-"     return "\<tab>"
-"   else
-"     return "\<c-p>"
-"   endif
-" endfunction
-" inoremap <expr> <tab> InsertTabWrapper()
-" inoremap <s-tab> <c-n>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SHORTCUT TO REFERENCE CURRENT FILE'S PATH IN COMMAND LINE MODE
+" Very Fancy
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-cnoremap <expr> %% expand('%:h').'/'
+" TODO: Check out Gary Bernhardt's Test running business
