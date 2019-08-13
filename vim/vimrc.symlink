@@ -206,6 +206,8 @@ color grb256
 " Ctrl-P -- https://github.com/ctrlpvim/ctrlp.vim
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_working_path_mode = 'ra'
+" Ignore files in .gitignore
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
