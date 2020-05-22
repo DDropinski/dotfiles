@@ -133,6 +133,8 @@ augroup vimrcEx
   " Clear all autocmds in the group
   autocmd!
   autocmd FileType text setlocal textwidth=78
+  autocmd FileType gitcommit setlocal spell
+
   " Jump to last cursor position unless it's invalid or in an event handler
   autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -209,6 +211,10 @@ let g:ctrlp_working_path_mode = 'ra'
 " Ignore files in .gitignore
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
+" Substitute for ag, rg, whatever
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep'
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Very Fancy
