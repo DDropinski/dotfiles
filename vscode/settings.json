@@ -1,8 +1,7 @@
 {
     "workbench.colorTheme": "One Monokai",
-    "editor.fontFamily": "'Fira Code', Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontFamily": "'Fira Mono', Menlo, Monaco, 'Courier New', monospace",
     "editor.fontSize": 12,
-    "editor.fontLigatures": true,
     "[plaintext]": {
         "editor.wordWrap": "on"
     },
