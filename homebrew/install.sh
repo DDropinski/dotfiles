@@ -13,7 +13,6 @@ then
   exit
 fi
 
-# Install homebrew packages
-brew install grc coreutils spark
+brew bundle install --file $(dirname "$0")/Brewfile
 
 exit 0
