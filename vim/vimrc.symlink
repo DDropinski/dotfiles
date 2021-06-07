@@ -4,7 +4,6 @@
 " remove all existing autocmds
 autocmd!
 
-
 set nocompatible
 
 " Set filetype stuff to on
@@ -48,10 +47,6 @@ syntax on
 " Keep some stuff in the history
 set history=100
 
-" TODO: Do I even use folds???
-" These commands open folds
-" set foldopen=block,insert,jump,mark,percent,quickfix,search,tag,undo
-
 " When the page starts to scroll, keep the cursor 8 lines from the top and 8
 " lines from the bottom
 set scrolloff=3
@@ -90,6 +85,15 @@ set showmatch
 " set colorcolumn=81
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Language Specific Settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup langSpecific
+  " for c#, autoindent with 4 spaces
+  autocmd FileType cs set sw=4 sts=4 et
+
+augroup END
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader Things
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -99,11 +103,6 @@ let mapleader = ","
 
 " cd to the directory containing the file in the buffer
 nmap <silent> ,cd :lcd %:h<CR>
-
-" Edit the vimrc file
-nmap <silent> ,ev :e ~/.vimrc<CR>
-nmap <silent> ,sv :so ~/.vimrc<CR>
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Splits with <c-hjkl>
@@ -145,11 +144,6 @@ augroup vimrcEx
   autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
   autocmd BufRead *.markdown  set ai formatoptions=tcroqn2 comments=n:&gt;
 
-  " Leave the return key alone when in command line windows, since it's used
-  " to run commands there.
-  autocmd! CmdwinEnter * :unmap <cr>
-  autocmd! CmdwinLeave * :call MapCR()
-
   " *.md is markdown
   autocmd! BufNewFile,BufRead *.md setlocal ft=
 
@@ -160,22 +154,6 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Status Line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" function! DerekFugitiveStatusLine()
-"  let status = fugitive#statusline()
-"  let trimmed = substitute(status, '\[Git(\(.*\))\]', '\1', '')
-"  let trimmed = substitute(trimmed, '\(\w\)\w\+[_/]\ze', '\1/', '')
-"  let trimmed = substitute(trimmed, '/[^_]*\zs_.*', '', '')
-"  if len(trimmed) == 0
-"    return ""
-"  else
-"    return '(' . trimmed[0:10] . ')'
-"  endif
-"endfunction
-
-" Set the status line the way i like it
-":set statusline=%f\ %m\ %r%{DerekFugitiveStatusLine()}\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
-
-
 function! DerekFugitiveStatusLine()
   let status = fugitive#statusline()
   let trimmed = substitute(status, '\[Git(\(.*\))\]', '\1', '')
@@ -211,12 +189,87 @@ let g:ctrlp_working_path_mode = 'ra'
 " Ignore files in .gitignore
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
+" Ack.vim
+" Any empty ack search will search for the work the cursor is on
+let g:ack_use_cword_for_empty_search = 1
+
 " Substitute for ag, rg, whatever
 if executable('rg')
-  let g:ackprg = 'rg --vimgrep'
+  " --smart-case -> Search case insensitive if all lowercase pattern, Search case sensitively otherwise
+  let g:ackprg = 'rg --vimgrep --smart-case'
 endif
+
+" OmniSharp-Vim
+let g:OmniSharp_server_stdio = 1
+nnoremap <Leader><Space> :OmniSharpGetCodeActions<CR>
+
+
+let g:OmniSharp_popup_options = {
+\ 'highlight': 'Normal',
+\ 'padding': [1],
+\ 'border': [1]
+\}
+
+" Don't autoselect first omnicomplete option, show options even if there is
+" only one (so the preview documentation is accessible). Remove 'preview',
+" 'popup'
+" and 'popuphidden' if you don't want to see any documentation whatsoever.
+" Note that neovim does not support `popuphidden` or `popup` yet:
+" https://github.com/neovim/neovim/issues/10996
+" set completeopt=longest,menuone,preview,popuphidden
+
+" Highlight the completion documentation popup background/foreground the
+" same as
+" the completion menu itself, for better readability with highlighted
+" documentation.
+" set completepopup=highlight:Pmenu,border:off
+
+" Fetch full documentation during omnicomplete requests.
+" By default, only Type/Method signatures are fetched. Full documentation can
+" still be fetched when you need it with the :OmniSharpDocumentation command.
+" let g:omnicomplete_fetch_full_documentation = 1
+
+" Set desired preview window height for viewing documentation.
+" You might also want to look at the echodoc plugin.
+" set previewheight=5
+
+
+augroup omnisharp_commands
+  " The following commands are contextual, based on the cursor position.
+  autocmd FileType cs nnoremap <buffer> gd :OmniSharpGotoDefinition<CR>
+  autocmd FileType cs nnoremap <buffer> <Leader>fi :OmniSharpFindImplementations<CR>
+  autocmd FileType cs nnoremap <buffer> <Leader>fs :OmniSharpFindSymbol<CR>
+  autocmd FileType cs nnoremap <buffer> <Leader>fu :OmniSharpFindUsages<CR>
+  autocmd FileType cs nnoremap <buffer> <Leader>cf :OmniSharpCodeFormat<CR>
+augroup END
+
+augroup ale_commands
+  " The following commands are contextual, based on the cursor position.
+  autocmd FileType rust nnoremap <buffer> gd :ALEGoToDefinition<CR>
+  autocmd FileType rust nnoremap <buffer> <Leader>fu :ALEFindReferences<CR>
+augroup END
+
+" ALE
+let g:ale_linters = {
+      \ 'cs': ['OmniSharp'],
+      \ 'javascript': ['eslint'],
+      \ 'rust': ['rustc', 'rls'],
+\}
+
+
+let g:rustfmt_autosave = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Very Fancy
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TODO: Check out Gary Bernhardt's Test running business
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Automatic Help Tag Generation
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Load all plugins now.
+" Plugins need to be added to runtimepath before helptags can be generated.
+packloadall
+" Load all of the helptags now, after plugins have been loaded.
+" All messages and errors will be ignored.
+silent! helptags ALL

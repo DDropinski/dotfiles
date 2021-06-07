@@ -1,0 +1,6 @@
+[submodule "vim/vim.symlink/pack/ddrop/start/ale"]
+	path = vim/vim.symlink/pack/ddrop/start/ale
+	url = https://github.com/dense-analysis/ale.git
+[submodule "vim/vim.symlink/pack/ddrop/start/dispatch"]
+	path = vim/vim.symlink/pack/ddrop/start/dispatch
+	url = https://github.com/tpope/vim-dispatch.git
