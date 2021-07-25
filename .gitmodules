@@ -7,3 +7,6 @@
 [submodule "vim/vim.symlink/pack/ddrop/start/vim-lucius"]
 	path = vim/vim.symlink/pack/ddrop/start/vim-lucius
 	url = git@github.com:jonathanfilip/vim-lucius.git
+[submodule "vim/vim.symlink/pack/ddrop/start/vim-cool"]
+	path = vim/vim.symlink/pack/ddrop/start/vim-cool
+	url = git@github.com:romainl/vim-cool.git
