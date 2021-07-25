@@ -4,3 +4,6 @@
 [submodule "vim/vim.symlink/pack/ddrop/start/dispatch"]
 	path = vim/vim.symlink/pack/ddrop/start/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
+[submodule "vim/vim.symlink/pack/ddrop/start/vim-lucius"]
+	path = vim/vim.symlink/pack/ddrop/start/vim-lucius
+	url = git@github.com:jonathanfilip/vim-lucius.git
