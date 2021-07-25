@@ -173,10 +173,17 @@ set statusline=%F%m%r%h%w\ %{fugitive#statusline()}\ [%l,%c]\ [%L,%p%%]
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colorize
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-:set t_Co=256 " 256 colors
+" :set t_Co=256 " 256 colors
 set background=dark
 " TODO: Back to the old colorscheme?
-color grb256
+:set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+:color grb-lucius
+GrbLuciusDark
+" :color grb-lucious
+" GrbLuciusDarkHighContrast
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -214,7 +221,7 @@ let g:OmniSharp_popup_options = {
 " only one (so the preview documentation is accessible). Remove 'preview',
 " 'popup'
 " and 'popuphidden' if you don't want to see any documentation whatsoever.
-" Note that neovim does not support `popuphidden` or `popup` yet:
+" Note that neovim does not support `popuphidden` or `popup` yet: 
 " https://github.com/neovim/neovim/issues/10996
 " set completeopt=longest,menuone,preview,popuphidden
 
