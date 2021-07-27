@@ -10,3 +10,6 @@
 [submodule "vim/vim.symlink/pack/ddrop/start/vim-cool"]
 	path = vim/vim.symlink/pack/ddrop/start/vim-cool
 	url = git@github.com:romainl/vim-cool.git
+[submodule "vim/vim.symlink/pack/ddrop/start/vim-rhubarb"]
+	path = vim/vim.symlink/pack/ddrop/start/vim-rhubarb
+	url = git@github.com:tpope/vim-rhubarb.git
