@@ -124,18 +124,7 @@ Plug 'jonathanfilip/vim-lucius'
 " suspend and `fg`
 " Plug 'tpope/vim-dispatch'
 
-
 call plug#end()
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Language Specific Settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-augroup langSpecific
-  " for c#, autoindent with 4 spaces
-  autocmd FileType cs set sw=4 sts=4 et
-
-augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader Things
@@ -184,6 +173,9 @@ augroup vimrcEx
     \   exe "normal g`\"" |
     \ endif
 
+  " for c#, autoindent with 4 spaces
+  autocmd! FileType cs set sw=4 sts=4 et
+
   "for ruby, autoindent with two spaces, always expand tabs
   autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
   autocmd BufRead *.markdown  set ai formatoptions=tcroqn2 comments=n:&gt;
@@ -193,6 +185,7 @@ augroup vimrcEx
 
   " javascript
   autocmd! FileType javascript set sw=2 sts=2 expandtab autoindent smartindent nocindent
+  autocmd! FileType json set sw=2 sts=2 expandtab
 augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -298,6 +291,11 @@ augroup ale_commands
   " The following commands are contextual, based on the cursor position.
   autocmd FileType rust nnoremap <buffer> gd :ALEGoToDefinition<CR>
   autocmd FileType rust nnoremap <buffer> <Leader>fu :ALEFindReferences<CR>
+
+  autocmd FileType typescript,typescript.tsx nnoremap <buffer> gd :TsuDefinition<cr>
+  autocmd FileType typescript,typescript.tsx nnoremap <buffer> gD :TsuTypeDefinition<cr>
+  autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>fu :TsuReferences<cr>
+  autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>fi :TsuImplementation<cr>
 augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -323,8 +321,20 @@ let g:ale_lint_delay = 0
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 
+nnoremap gj :ALENextWrap<cr>
+nnoremap gk :ALEPreviousWrap<cr>
+nnoremap g1 :ALEFirst<cr>
 
 let g:rustfmt_autosave = 1
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tsuquyomi
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim-ale handles TypeScript quickfix, so tell Tsuquyomi not to do it.
+let g:tsuquyomi_disable_quickfix = 1
+let g:tsuquyomi_shortest_import_path = 1
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Very Fancy
