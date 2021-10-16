@@ -3,4 +3,5 @@ sublime2/User/Package Control.last-run
 git/gitconfig.local.symlink
 homebrew/Brewfile.lock.json
 vim/vim.symlink/spell
+vim/vim.symlink/plugged/
 .netrwhist

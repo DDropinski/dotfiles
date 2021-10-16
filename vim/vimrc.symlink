@@ -85,6 +85,50 @@ set showmatch
 " set colorcolumn=81
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugins
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Specifies the directory to use for plugins
+call plug#begin('~/.vim/plugged')
+
+" Navigation
+Plug 'mileszs/ack.vim'
+Plug 'ctrlpvim/ctrlp.vim'
+" netrw extras
+Plug 'tpope/vim-vinegar'
+
+" Git Tools
+" Basically, overkill for only opening Github URLs automatically
+Plug 'tpope/vim-rhubarb'
+" Inline git commands
+Plug 'tpope/vim-fugitive'
+
+" Automatically disable search highlighting
+Plug 'romainl/vim-cool'
+
+" Typescript
+Plug 'Quramy/tsuquyomi'
+Plug 'w0rp/ale'
+
+" Csharp
+Plug 'OmniSharp/omnisharp-vim'
+
+" Rust
+Plug 'rust-lang/rust.vim'
+
+" Color schemes
+Plug 'jonathanfilip/vim-lucius'
+
+" Aspriational plugins
+" Figure out a good way to run TS tests quickly -- dispatch would be able to
+" kick off async windows, which might be exactly right, unless I just want to
+" suspend and `fg`
+" Plug 'tpope/vim-dispatch'
+
+
+call plug#end()
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Language Specific Settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 augroup langSpecific
@@ -287,12 +331,3 @@ let g:rustfmt_autosave = 1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TODO: Check out Gary Bernhardt's Test running business
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Automatic Help Tag Generation
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Load all plugins now.
-" Plugins need to be added to runtimepath before helptags can be generated.
-packloadall
-" Load all of the helptags now, after plugins have been loaded.
-" All messages and errors will be ignored.
-silent! helptags ALL
