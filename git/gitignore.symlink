@@ -2,4 +2,6 @@
 .svn
 *~
 *.swp
+*.swo
+*.swn
 *.rbc
