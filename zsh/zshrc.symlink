@@ -10,6 +10,9 @@ export DOTFILES="$HOME/.dotfiles"
 # Add dotfiles bin to path
 export PATH="$PATH:$DOTFILES/bin"
 
+# Add GPG_TTY for commit signing
+export GPG_TTY=$(tty)
+
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -60,6 +63,15 @@ ZSH_THEME="robbyrussell"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+
+
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+  autoload -Uz compinit
+  compinit
+fi
+
 
 # User configuration
 
@@ -114,6 +126,3 @@ function xc {
 export BASE_URL=hudl.com
 
 eval "$(rbenv init -)"
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
