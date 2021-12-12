@@ -96,6 +96,11 @@ Plug 'ctrlpvim/ctrlp.vim'
 " netrw extras
 Plug 'tpope/vim-vinegar'
 
+" Editing Utility
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+
 " Git Tools
 " Basically, overkill for only opening Github URLs automatically
 Plug 'tpope/vim-rhubarb'
@@ -105,9 +110,13 @@ Plug 'tpope/vim-fugitive'
 " Automatically disable search highlighting
 Plug 'romainl/vim-cool'
 
+" React
+Plug 'maxmellon/vim-jsx-pretty'
+
 " Typescript
 Plug 'Quramy/tsuquyomi'
 Plug 'w0rp/ale'
+Plug 'leafgarland/typescript-vim'
 
 " Csharp
 Plug 'OmniSharp/omnisharp-vim'
@@ -186,6 +195,14 @@ augroup vimrcEx
   " javascript
   autocmd! FileType javascript set sw=2 sts=2 expandtab autoindent smartindent nocindent
   autocmd! FileType json set sw=2 sts=2 expandtab
+
+  " python
+  autocmd! FileType python set shiftwidth=4 tabstop=4 softtabstop=4 shiftwidth=4 expandtab autoindent
+
+  " Vim 8.2 adds built-in JSX support which seems broken. Setting these
+  " filetypes lets the installed plugins deal with JSX/TSX instead.
+  autocmd bufnewfile,bufread *.tsx set filetype=typescript.tsx
+  autocmd bufnewfile,bufread *.jsx set filetype=javascript.jsx
 augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -311,8 +328,8 @@ let g:ale_linters = {
 
 let g:ale_fixers = {
       \ 'javascript': ['eslint'],
-      \ 'typescript': ['tsserver', 'eslint'],
-      \ 'typescript.tsx': ['tsserver', 'eslint'],
+      \ 'typescript': ['eslint'],
+      \ 'typescript.tsx': ['eslint'],
 \}
 
 let g:ale_lint_on_text_changed = 'normal'
@@ -335,6 +352,11 @@ let g:rustfmt_autosave = 1
 let g:tsuquyomi_disable_quickfix = 1
 let g:tsuquyomi_shortest_import_path = 1
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" InsertTime COMMAND
+" Insert the current time
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+command! InsertTime :normal a<c-r>=strftime('%F %H:%M:%S.0 %z')<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Very Fancy
