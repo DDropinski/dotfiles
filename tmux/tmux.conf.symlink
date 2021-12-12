@@ -47,6 +47,9 @@ set-option -g allow-rename off
 # start with blank name when renaming windows
 unbind ,
 bind-key , command-prompt -p (rename-window) "rename-window '%%'"
+
+# Renumber windows whenever others are closed
+set-option -g renumber-windows on
       
 
 ##################
