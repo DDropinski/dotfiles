@@ -185,7 +185,6 @@ augroup vimrcEx
   " for c#, autoindent with 4 spaces
   autocmd! FileType cs set sw=4 sts=4 et
 
-  "for ruby, autoindent with two spaces, always expand tabs
   autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
   autocmd BufRead *.markdown  set ai formatoptions=tcroqn2 comments=n:&gt;
 
