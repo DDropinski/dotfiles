@@ -80,6 +80,13 @@ set number
 " Briefly jump to the matching bracket/paren/etc.
 set showmatch
 
+" Use persistent undo history
+if !isdirectory("/tmp/.vim-undo-dir")
+  call mkdir("/tmp/.vim-undo-dir", "", 0700)
+endif
+set undodir=/tmp/.vim-undo-dir
+set undofile
+
 " show visual indicator of >80c lines
 " hitting 80 lines is death
 " set colorcolumn=81
@@ -146,6 +153,9 @@ let mapleader = ","
 " cd to the directory containing the file in the buffer
 nmap <silent> ,cd :lcd %:h<CR>
 
+" Yank to system copy-paste buffer with ,y
+map <Leader>y "*y
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Splits with <c-hjkl>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -166,6 +176,11 @@ set splitright
 imap jj <esc>
 " Stop typing jj during command-line mode like a dummy
 cmap jj <esc>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Can I retrain myself to use <C-c>?
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+inoremap <c-c> <esc>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocmds 
@@ -248,6 +263,7 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_working_path_mode = 'ra'
 " Ignore files in .gitignore
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+nnoremap <Leader>f :CtrlP<CR>
 
 " Ack.vim
 " Any empty ack search will search for the work the cursor is on
@@ -296,7 +312,8 @@ let g:OmniSharp_popup_options = {
 
 augroup omnisharp_commands
   " The following commands are contextual, based on the cursor position.
-  autocmd FileType cs nnoremap <buffer> gd :OmniSharpGotoDefinition<CR>
+  autocmd FileType cs nnoremap <buffer> <Leader>d :OmniSharpGotoDefinition<CR>
+  autocmd FileType cs nnoremap <buffer> <Leader>D :OmniSharpTypeLookup<CR>
   autocmd FileType cs nnoremap <buffer> <Leader>fi :OmniSharpFindImplementations<CR>
   autocmd FileType cs nnoremap <buffer> <Leader>fs :OmniSharpFindSymbol<CR>
   autocmd FileType cs nnoremap <buffer> <Leader>fu :OmniSharpFindUsages<CR>
@@ -305,11 +322,11 @@ augroup END
 
 augroup ale_commands
   " The following commands are contextual, based on the cursor position.
-  autocmd FileType rust nnoremap <buffer> gd :ALEGoToDefinition<CR>
+  autocmd FileType rust nnoremap <buffer> <Leader>d :ALEGoToDefinition<CR>
   autocmd FileType rust nnoremap <buffer> <Leader>fu :ALEFindReferences<CR>
 
-  autocmd FileType typescript,typescript.tsx nnoremap <buffer> gd :TsuDefinition<cr>
-  autocmd FileType typescript,typescript.tsx nnoremap <buffer> gD :TsuTypeDefinition<cr>
+  autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>d :TsuDefinition<cr>
+  autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>D :TsuTypeDefinition<cr>
   autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>fu :TsuReferences<cr>
   autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>fi :TsuImplementation<cr>
 augroup END
@@ -350,6 +367,7 @@ let g:rustfmt_autosave = 1
 " Vim-ale handles TypeScript quickfix, so tell Tsuquyomi not to do it.
 let g:tsuquyomi_disable_quickfix = 1
 let g:tsuquyomi_shortest_import_path = 1
+let g:tsuquyomi_single_quote_import = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " InsertTime COMMAND

@@ -19,7 +19,6 @@ brew "rbenv"
 brew "ripgrep"
 brew "sqlite"
 brew "the_silver_searcher"
-brew "tldr"
 brew "tmux"
 brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
 brew "vim"
