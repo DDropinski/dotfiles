@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 export DOTFILES="$HOME/dotfiles"
 
 # Add dotfiles bin to path
-export PATH="$PATH:$DOTFILES/bin"
+path+=($DOTFILES/bin)
 
 # Add GPG_TTY for commit signing
 export GPG_TTY=$(tty)
@@ -112,18 +112,25 @@ export NVM_DIR="/Users/david.dropinski/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-export PATH="/usr/local/sbin:$PATH:$HOME/Documents/chromedriver"
+path=("/usr/local/sbin" $path)
+path+=("$HOME/Documents/chromedriver")
+
+# M1 homebrew
+path+=("/opt/homebrew/bin")
 # Expose homebrew ruby to system
-export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/2.5.0/bin:$PATH"
+# export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/2.5.0/bin:$PATH"
 
 
 # Android React Native Setup
 export ANDROID_HOME=$HOME/Library/Android/sdk
-# export PATH=$PATH:$ANDROID_HOME/emulator
+path+=($ANDROID_HOME/emulator)
+path+=($ANDROID_HOME/platform-tools)
+
 # export PATH=$PATH:$ANDROID_HOME/tools
 # export PATH=$PATH:$ANDROID_HOME/tools/bin
-# export PATH=$PATH:$ANDROID_HOME/platform-tools
 
+# Add .NET Core SDK tools
+path+=(/Users/david.dropinski/.dotnet/tools)
 
 # Open first Xcode workspace or project
 function xc {
@@ -139,5 +146,7 @@ function xc {
 }
 
 export BASE_URL=hudl.com
+
+export PATH
 
 eval "$(rbenv init -)"
