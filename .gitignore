@@ -1,4 +1,7 @@
 .netrwhist
+bin/aws-rotate-key
+bin/camera-connect
+bin/focus-ssh
 config/config.symlink/AWSVPNClient/
 config/config.symlink/AWS\ VPN\ Client/
 config/config.symlink/configstore
