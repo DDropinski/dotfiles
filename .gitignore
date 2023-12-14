@@ -1,7 +1,13 @@
-sublime2/User/Package\ Control.sublime-settings
-sublime2/User/Package Control.last-run
+.netrwhist
+config/config.symlink/AWSVPNClient/
+config/config.symlink/AWS\ VPN\ Client/
+config/config.symlink/configstore
+config/config.symlink/flipper
+config/config.symlink/iterm2
+config/config.symlink/wireshark
 git/gitconfig.local.symlink
 homebrew/Brewfile.lock.json
-vim/vim.symlink/spell
+sublime2/User/Package Control.last-run
+sublime2/User/Package\ Control.sublime-settings
 vim/vim.symlink/plugged/
-.netrwhist
+vim/vim.symlink/spell
