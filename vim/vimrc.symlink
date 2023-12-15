@@ -99,7 +99,10 @@ call plug#begin('~/.vim/plugged')
 
 " Navigation
 Plug 'mileszs/ack.vim'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 " netrw extras
 Plug 'tpope/vim-vinegar'
 
@@ -259,11 +262,16 @@ GrbLuciusDark
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Ctrl-P -- https://github.com/ctrlpvim/ctrlp.vim
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_working_path_mode = 'ra'
+" let g:ctrlp_map = '<c-p>'
+" let g:ctrlp_working_path_mode = 'ra'
 " Ignore files in .gitignore
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-nnoremap <Leader>f :CtrlP<CR>
+" let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+" nnoremap <Leader>f :CtrlP<CR>
+
+" FZF
+let g:fzf_vim = {}
+let g:fzf_vim.preview_window = ['right,50%', 'ctrl-\']
+nnoremap <silent> <C-p> :Files<CR>
 
 " Ack.vim
 " Any empty ack search will search for the work the cursor is on
