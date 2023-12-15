@@ -137,8 +137,12 @@ Plug 'OmniSharp/omnisharp-vim'
 " Rust
 Plug 'rust-lang/rust.vim'
 
+" Python
+Plug 'davidhalter/jedi-vim'
+
 " Color schemes
 Plug 'jonathanfilip/vim-lucius'
+
 
 " Aspriational plugins
 " Figure out a good way to run TS tests quickly -- dispatch would be able to
@@ -340,7 +344,17 @@ augroup ale_commands
   autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>D :TsuTypeDefinition<cr>
   autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>fu :TsuReferences<cr>
   autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>fi :TsuImplementation<cr>
+  autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>F :ALEFix<cr>
+  autocmd FileType typescript,typescript.tsx nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
 augroup END
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-jedi -- Python Keybinds
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:jedi#goto_command = "<leader>fi"
+let g:jedi#goto_assignments_command = "<leader>d"
+let g:jedi#goto_definitions_command = "<leader>D"
+let g:jedi#usages_command = "<leader>fu"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ALE
@@ -350,7 +364,7 @@ let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ 'typescript': ['tsserver', 'eslint'],
       \ 'typescript.tsx': ['tsserver', 'eslint'],
-      \ 'rust': ['rustc', 'rls'],
+      \ 'rust': ['analyzer'],
 \}
 
 let g:ale_fixers = {
