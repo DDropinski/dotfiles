@@ -117,6 +117,9 @@ Plug 'tpope/vim-rhubarb'
 " Inline git commands
 Plug 'tpope/vim-fugitive'
 
+" Terraform
+Plug 'hashivim/vim-terraform'
+
 " Automatically disable search highlighting
 Plug 'romainl/vim-cool'
 
