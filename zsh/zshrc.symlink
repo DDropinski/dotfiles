@@ -132,6 +132,9 @@ path+=($ANDROID_HOME/platform-tools)
 # Add .NET Core SDK tools
 path+=(/Users/david.dropinski/.dotnet/tools)
 
+# Add Visual Studio Code
+path+=("/Applications/Visual Studio Code.app/Contents/Resources/app/bin")
+
 # Open first Xcode workspace or project
 function xc {
   xcode_proj=`find . -name "*.xc*" -d 1 | sort -r | head -1`
@@ -150,3 +153,6 @@ export BASE_URL=hudl.com
 export PATH
 
 eval "$(rbenv init -)"
+# Use silver searcher for fzf instead of default behavior
+# Helps with vim ctrl-p performance
+export FZF_DEFAULT_COMMAND="rg --files"
