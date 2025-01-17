@@ -23,7 +23,9 @@ set nowrap
 set textwidth=0
 
 " Printing options
-set printoptions=header:0,duplex:long,paper:letter
+if !has('nvim')
+  set printoptions=header:0,duplex:long,paper:letter
+endif
 
 " set the search scan to wrap lines
 set wrapscan
@@ -99,17 +101,17 @@ call plug#begin('~/.vim/plugged')
 
 " Navigation
 Plug 'mileszs/ack.vim'
-" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 " netrw extras
 Plug 'tpope/vim-vinegar'
 
-" Editing Utility
+" " Editing Utility
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-capslock'
 
 " Git Tools
 " Basically, overkill for only opening Github URLs automatically
@@ -119,6 +121,9 @@ Plug 'tpope/vim-fugitive'
 
 " Terraform
 Plug 'hashivim/vim-terraform'
+
+" Copilot
+Plug 'github/copilot.vim'
 
 " Automatically disable search highlighting
 Plug 'romainl/vim-cool'
@@ -165,6 +170,11 @@ nmap <silent> ,cd :lcd %:h<CR>
 
 " Yank to system copy-paste buffer with ,y
 map <Leader>y "*y
+
+" Stop typing `Ack` so much.
+nnoremap <Leader>a :Ack<space>
+" Search for the word under the cursor
+nnoremap <Leader>A :Ack<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Splits with <c-hjkl>
@@ -244,8 +254,7 @@ function! DerekFugitiveStatusLine()
   endif
 endfunction
 
-" Set the status line the way i like it
-" set stl=%f\ %m\ %r%{DerekFugitiveStatusLine()}\ Line:%l/%L[%p%%]\ Col:%v\ Buf:#%n\ [%b][0x%B]
+" " Set the status line the way i like it
 set statusline=%F%m%r%h%w\ %{fugitive#statusline()}\ [%l,%c]\ [%L,%p%%]
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -292,6 +301,7 @@ endif
 
 " OmniSharp-Vim
 let g:OmniSharp_server_stdio = 1
+let g:OmniSharp_server_use_mono = 1
 nnoremap <Leader><Space> :OmniSharpGetCodeActions<CR>
 
 
@@ -339,6 +349,7 @@ augroup ale_commands
   " The following commands are contextual, based on the cursor position.
   autocmd FileType rust nnoremap <buffer> <Leader>d :ALEGoToDefinition<CR>
   autocmd FileType rust nnoremap <buffer> <Leader>fu :ALEFindReferences<CR>
+  autocmd FileType rust nnoremap <buffer> <Leader>fi :ALEGoToImplementation<cr>
 
   autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>d :TsuDefinition<cr>
   autocmd FileType typescript,typescript.tsx nnoremap <buffer> <Leader>D :TsuTypeDefinition<cr>
@@ -364,8 +375,9 @@ let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ 'typescript': ['tsserver', 'eslint'],
       \ 'typescript.tsx': ['tsserver', 'eslint'],
-      \ 'rust': ['analyzer'],
+      \ 'rust': ['analyzer', 'cargo'],
 \}
+let g:ale_rust_cargo_use_clippy = 1
 
 let g:ale_fixers = {
       \ 'javascript': ['eslint'],
@@ -393,6 +405,8 @@ let g:rustfmt_autosave = 1
 let g:tsuquyomi_disable_quickfix = 1
 let g:tsuquyomi_shortest_import_path = 1
 let g:tsuquyomi_single_quote_import = 1
+
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " InsertTime COMMAND
