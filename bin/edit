@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+
+# From: https://justin.searls.co/posts/handy-script-for-launching-editors/
+
+# Configuration (with environment variable fallbacks)
+CODE_DIR=${CODE_DIR:-"$HOME/src"}
+DEFAULT_ORG=${DEFAULT_ORG:-"ddropinski"}
+DEFAULT_EDITOR=${DEFAULT_EDITOR:-"code"}
+
+# Validate configuration
+if [ ! -d "$CODE_DIR" ]; then
+  echo "Error: CODE_DIR '$CODE_DIR' does not exist" >&2
+  exit 1
+fi
+
+if ! command -v "$DEFAULT_EDITOR" >/dev/null 2>&1; then
+  echo "Error: DEFAULT_EDITOR '$DEFAULT_EDITOR' is not executable or not found in PATH" >&2
+  exit 1
+fi
+
+# Function to find or clone a repository
+find_or_clone_repo() {
+  local input="$1"
+
+  # Strip trailing slashes (except for root directory)
+  if [[ "$input" != "/" ]]; then
+    input="${input%/}"
+  fi
+
+  # Handle current directory
+  if [ "$input" = "." ] || [ "$input" = ".." ]; then
+    echo "$(pwd)/$input"
+    return 0
+  fi
+
+  # Handle absolute paths
+  if [[ "$input" = /* ]]; then
+    echo "$input"
+    return 0
+  fi
+
+  # Check if it contains a slash (org/repo pattern)
+  if [[ "$input" == */* ]]; then
+    # Count slashes to ensure it's only org/repo format
+    local slash_count=$(echo "$input" | tr -cd '/' | wc -c)
+    if [ "$slash_count" -gt 1 ]; then
+      echo "Error: '$input' contains multiple slashes. Only 'org/repo' format is supported for GitHub cloning." >&2
+      return 1
+    fi
+
+    local org="${input%/*}"
+    local repo="${input#*/}"
+
+    # Check if relative path exists
+    if [ -d "$input" ]; then
+      echo "$(pwd)/$input"
+      return 0
+    fi
+
+    # Check if it exists in code directory
+    if [ -d "$CODE_DIR/$org/$repo" ]; then
+      echo "$CODE_DIR/$org/$repo"
+      return 0
+    fi
+
+    # Try to clone it
+    echo "Repository not found locally. Cloning $org/$repo..." >&2
+    mkdir -p "$CODE_DIR/$org" || {
+      echo "Error: Failed to create directory '$CODE_DIR/$org'" >&2
+      return 1
+    }
+
+    local original_dir=$(pwd)
+    if cd "$CODE_DIR/$org" && git clone "git@github.com:$org/$repo.git"; then
+      cd "$original_dir"
+      echo "$CODE_DIR/$org/$repo"
+      return 0
+    else
+      cd "$original_dir"
+      echo "Error: Failed to clone git@github.com:$org/$repo.git" >&2
+      echo "This could be due to network issues, authentication problems, or the repository not existing." >&2
+      return 1
+    fi
+  else
+    # Bare repo name - try various locations
+
+    # Check if it's a valid path as-is
+    if [ -d "$input" ]; then
+      echo "$(pwd)/$input"
+      return 0
+    fi
+
+    # Check in code directory root
+    if [ -d "$CODE_DIR/$input" ]; then
+      echo "$CODE_DIR/$input"
+      return 0
+    fi
+
+    # Check in default org directory
+    if [ -d "$CODE_DIR/$DEFAULT_ORG/$input" ]; then
+      echo "$CODE_DIR/$DEFAULT_ORG/$input"
+      return 0
+    fi
+
+    # Try to clone from default org
+    echo "Repository not found locally. Cloning $DEFAULT_ORG/$input..." >&2
+    mkdir -p "$CODE_DIR/$DEFAULT_ORG" || {
+      echo "Error: Failed to create directory '$CODE_DIR/$DEFAULT_ORG'" >&2
+      return 1
+    }
+
+    local original_dir=$(pwd)
+    if cd "$CODE_DIR/$DEFAULT_ORG" && git clone "git@github.com:$DEFAULT_ORG/$input.git"; then
+      cd "$original_dir"
+      echo "$CODE_DIR/$DEFAULT_ORG/$input"
+      return 0
+    else
+      cd "$original_dir"
+      echo "Error: Failed to clone git@github.com:$DEFAULT_ORG/$input.git" >&2
+      echo "This could be due to network issues, authentication problems, or the repository not existing." >&2
+      return 1
+    fi
+  fi
+}
+
+# Function to launch editor
+launch_editor() {
+  local editor="$1"
+  local path="$2"
+
+  # Validate that the path exists and is a directory
+  if [ ! -d "$path" ]; then
+    echo "Error: '$path' is not a valid directory" >&2
+    return 1
+  fi
+
+  case "$editor" in
+    vim)
+      (cd "$path" && vim .)
+      ;;
+    claude)
+      (cd "$path" && claude)
+      ;;
+    code|code-insiders|cursor)
+      "$editor" "$path"
+      ;;
+    *)
+      echo "Error: Unknown editor '$editor'" >&2
+      echo "Supported editors: vim, code, code-insiders, cursor, claude" >&2
+      return 1
+      ;;
+  esac
+}
+
+# Parse arguments
+editor="$DEFAULT_EDITOR"
+paths=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --editor|-e)
+      if [ -z "$2" ]; then
+        echo "Error: --editor/-e requires an argument" >&2
+        exit 1
+      fi
+      editor="$2"
+      shift 2
+      ;;
+    --help|-h)
+      echo "Usage: $(basename "$0") [--editor|-e EDITOR] path1 [path2 ...]"
+      echo ""
+      echo "EDITOR options: vim, code, code-insiders, cursor, claude"
+      echo "Default editor: $DEFAULT_EDITOR"
+      echo ""
+      echo "Path resolution:"
+      echo "  bare_repo        -> ~/code/searls/bare_repo (clone if needed)"
+      echo "  org/repo         -> ~/code/org/repo (clone if needed)"
+      echo "  ./relative/path  -> relative to current directory"
+      echo "  /absolute/path   -> absolute path"
+      echo "  .                -> current directory"
+      exit 0
+      ;;
+    --*)
+      echo "Error: Unknown option '$1'" >&2
+      echo "Use --help for usage information" >&2
+      exit 1
+      ;;
+    *)
+      paths+=("$1")
+      shift
+      ;;
+  esac
+done
+
+# Check if we have at least one path
+if [ ${#paths[@]} -eq 0 ]; then
+  echo "Error: No paths provided." >&2
+  echo "Usage: $(basename "$0") [--editor|-e EDITOR] path1 [path2 ...]" >&2
+  echo "Use --help for more information" >&2
+  exit 1
+fi
+
+# Process each path
+for path_input in "${paths[@]}"; do
+  if resolved_path=$(find_or_clone_repo "$path_input"); then
+    launch_editor "$editor" "$resolved_path" || exit 1
+  else
+    echo "Error: Could not resolve path '$path_input'" >&2
+    exit 1
+  fi
+done
