@@ -5,6 +5,11 @@ unbind C-b
 set-option -g prefix C-a
 bind-key C-a send-prefix
 
+# Use 'C-a C-c' to copy to MacOS pasteboard
+bind-key C-c run-shell 'tmux save-buffer - | pbcopy'
+# Use 'C-a C-v' to paste the MacOS pasteboard
+# bind-key C-v run-shell 'pbpaste | tmux load-buffer - \; paste-buffer -d'
+
 # split panes using \ and -
 bind \\ split-window -h -c '#{pane_current_path}'
 bind - split-window -v -c '#{pane_current_path}'
@@ -43,6 +48,8 @@ set -g base-index 1
 
 # Don't automatically rename windows
 set-option -g allow-rename off
+set-option -g automatic-rename off
+# set-option -g automatic-rename-format '#{d:pane_current_path}'
 
 # start with blank name when renaming windows
 unbind ,
@@ -50,7 +57,13 @@ bind-key , command-prompt -p (rename-window) "rename-window '%%'"
 
 # Renumber windows whenever others are closed
 set-option -g renumber-windows on
+
+# Send escape sequences through tmux, allowing Claude Code to notify correctly
+set -g allow-passthrough on
+# set -as terminal-overrides ',*:OSC 777=:OSC 9='
       
+# Notify applications (like Claude Code) when focus changes
+set -g focus-events on
 
 ##################
 # Design Changes #

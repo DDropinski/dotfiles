@@ -113,6 +113,9 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-capslock'
 
+" Diff Tool
+Plug 'will133/vim-dirdiff'
+
 " Git Tools
 " Basically, overkill for only opening Github URLs automatically
 Plug 'tpope/vim-rhubarb'
@@ -196,11 +199,6 @@ set splitright
 imap jj <esc>
 " Stop typing jj during command-line mode like a dummy
 cmap jj <esc>
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Can I retrain myself to use <C-c>?
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-inoremap <c-c> <esc>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autocmds 
@@ -296,12 +294,11 @@ let g:ack_use_cword_for_empty_search = 1
 " Substitute for ag, rg, whatever
 if executable('rg')
   " --smart-case -> Search case insensitive if all lowercase pattern, Search case sensitively otherwise
-  let g:ackprg = 'rg --vimgrep --smart-case'
+  let g:ackprg = 'rg --vimgrep --smart-case --ignore-file ~/.config/ripgrep/ignore'
 endif
 
 " OmniSharp-Vim
 let g:OmniSharp_server_stdio = 1
-let g:OmniSharp_server_use_mono = 1
 nnoremap <Leader><Space> :OmniSharpGetCodeActions<CR>
 
 

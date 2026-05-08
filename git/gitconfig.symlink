@@ -49,14 +49,25 @@
 [difftool]
         prompt = false
 [help]
-        autocorrect = 1
+        autocorrect = "never"
 [push]
         # See `git help config` (search for push.default)
         # for more information on different options of the below setting.
         #
         # Setting to git 2.0 default to surpress warning message
         default = simple
+        autoSetupRemote = true
 [pull]
-	rebase = true
+        rebase = true
 [init]
-	defaultBranch = main
+        defaultBranch = main
+[filter "lfs"]
+        clean = git-lfs clean -- %f
+        smudge = git-lfs smudge -- %f
+        process = git-lfs filter-process
+        required = true
+
+[diff]
+        algorithm = histogram
+[merge]
+        conflictstyle = zdiff3
