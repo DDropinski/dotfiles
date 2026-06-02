@@ -30,6 +30,9 @@
         la = !git l --all
         b = "!. ~/.githelpers && pretty_git_branch"
         bs = "!. ~/.githelpers && pretty_git_branch_sorted"
+        bc-add = "!git-bc-add"
+        bc-rm = "!git-bc-rm"
+        bc-prune = "!git-bc-prune"
 
         # List Recent Branches
         # https://ses4j.github.io/2020/04/01/git-alias-recent-branches/
